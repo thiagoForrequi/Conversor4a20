@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Conversor 4a20</string>
+
+    <string-array name="tipos_unidades">
+        <item>atm</item>
+        <item>bar</item>
+        <item>Pa</item>
+        <item>kPa</item>
+        <item>MPa</item>
+        <item>hPa (mbar)</item>
+        <item>kgf/cm2</item>
+        <item>kgf/m2</item>
+        <item>psi (lbf/in2)</item>
+        <item>mmHg (Torr)</item>
+        <item>inchHg</item>
+        <item>mmH2O</item>
+    </string-array>
+
+</resources>
