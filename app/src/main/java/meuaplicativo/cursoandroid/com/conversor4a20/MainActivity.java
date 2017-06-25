@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText entrada;
     private EditText saida;
     private Button btnCalcular;
+    private Button btnLimpar;
     private TextView resultadoPorcentagem;
     private TextView resultadoUnidade;
     private TextView resultadoMA;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         entrada = (EditText) findViewById(R.id.editTextEntradaId);
         saida = (EditText) findViewById(R.id.editTextSaidaId);
         btnCalcular = (Button) findViewById(R.id.btnCalcularId);
+        btnLimpar = (Button) findViewById(R.id.btnLimparId);
 
         resultadoPorcentagem = (TextView) findViewById(R.id.resultPorcentagemId);
         resultadoUnidade = (TextView) findViewById(R.id.resultUnidadeId);
@@ -169,6 +171,28 @@ public class MainActivity extends AppCompatActivity {
                     resultadoSaida.setText(valor.toString());
 
                 }
+            }
+
+        });
+
+        btnLimpar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                limiteInferior.setText("");
+                limiteSuperior.setText("");
+                porcentagem.setText("");
+                unidade.setText("");
+                ma.setText("");
+                unidade2.setText("");
+                entrada.setText("");
+                saida.setText("");
+                resultadoPorcentagem.setText("");
+                resultadoUnidade.setText("");
+                resultadoMA.setText("");
+                resultadoUnidade2.setText("");
+                resultadoEntrada.setText("");
+                resultadoSaida.setText("");
             }
 
         });
