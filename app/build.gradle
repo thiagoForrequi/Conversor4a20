@@ -1,39 +1,5 @@
 apply plugin: 'com.android.application'
 
-def getVersionTag = { variant ->
-    def stdout
-    try {
-        stdout = new ByteArrayOutputStream()
-        exec {
-            commandLine "git", "describe", "--match", "${variant}/*", "--long"
-            standardOutput = stdout
-        }
-        def longTag = stdout.toString().trim()
-
-        return longTag.substring(longTag.indexOf('/') + 1, longTag.indexOf('-'))
-    } catch (exception) {
-        return "0.0.1";
-    }
-}
-
-def getVersionCode = { tag ->
-    def parts = tag.tokenize('.')
-    if(parts.size() != 3 || parts[1].length() > 2 || parts[2].length() > 2) {
-        throw new RuntimeException("Invalid version tag \"${tag}\", format \"x.y.z\" expected.")
-    }
-    if(parts[1].length() == 1) {
-        parts[1] = "0" + parts[1]
-    }
-    if(parts[2].length() == 1) {
-        parts[2] = "0" + parts[2]
-    }
-    return Integer.parseInt(parts[0] + parts[1] + parts[2])
-}
-
-def getVersionName = { tag ->
-    return tag
-}
-
 android {
     compileSdkVersion 23
     buildToolsVersion "25.0.0"
@@ -41,25 +7,15 @@ android {
         applicationId "meuaplicativo.cursoandroid.com.conversor4a20"
         minSdkVersion 15
         targetSdkVersion 23
-//        ersionCode 1
-//        versionName "1.0"
-//        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"v
+        versionCode 2
+        versionName "1.0.1"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
-    }
-    applicationVariants.all { variant ->
-        def versionTag = getVersionTag(variant.buildType.name)
-        def myVersionCode = getVersionCode(versionTag)
-        def myVersionName = getVersionName(versionTag)
-
-        println variant.name + "[" + myVersionCode + ", " + myVersionName + "]"
-
-        variant.mergedFlavor.versionName = myVersionName;
-        variant.mergedFlavor.versionCode = myVersionCode;
     }
 }
 

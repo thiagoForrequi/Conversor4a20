@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -47,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        getWindow().setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         //Localizando elementos na tela
         limiteInferior = (EditText) findViewById(R.id.limInferiorId);
@@ -134,42 +138,91 @@ public class MainActivity extends AppCompatActivity {
                 String textoEntrada = entrada.getText().toString();
                 String textoSaida = saida.getText().toString();
 
-                if (textoLimiteInferior.isEmpty() || textoLimiteSuperior.isEmpty() ||
-                        textoPorcentagem.isEmpty() || textoUnidade.isEmpty() ||
-                        textoMa.isEmpty() || textoUnidade2.isEmpty() ||
-                        textoEntrada.isEmpty() || textoSaida.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Favor preencher todos os campos.", Toast.LENGTH_SHORT).show();
+                // Verificar os campos digitados
+                Double valorLimiteInferior = null;
+                if (textoLimiteInferior.isEmpty()) {
                 } else {
-                    Double valorLimiteInferior = Double.parseDouble(textoLimiteInferior);
-                    Double valorLimiteSuperior = Double.parseDouble(textoLimiteSuperior);
-                    Double valorPorcentagem = Double.parseDouble(textoPorcentagem);
-                    Double valorUnidade = Double.parseDouble(textoUnidade);
-                    Double valorMa = Double.parseDouble(textoMa);
-                    Double valorUnidade2 = Double.parseDouble(textoUnidade2);
-                    Double valorEntrada = Double.parseDouble(textoEntrada);
-                    Double valorSaida = Double.parseDouble(textoSaida);
+                    valorLimiteInferior = Double.parseDouble(textoLimiteInferior);
+                }
+                Double valorLimiteSuperior = null;
+                if (textoLimiteSuperior.isEmpty()) {
+                } else {
+                    valorLimiteSuperior = Double.parseDouble(textoLimiteSuperior);
+                }
+                Double valorPorcentagem = null;
+                if (textoPorcentagem.isEmpty()) {
+                } else {
+                    valorPorcentagem = Double.parseDouble(textoPorcentagem);
+                }
+                Double valorUnidade = null;
+                if (textoUnidade.isEmpty()) {
+                } else {
+                    valorUnidade = Double.parseDouble(textoUnidade);
+                }
+                Double valorMa = null;
+                if (textoMa.isEmpty()) {
+                } else {
+                    valorMa = Double.parseDouble(textoMa);
+                }
+                Double valorUnidade2 = null;
+                if (textoUnidade2.isEmpty()) {
+                } else {
+                    valorUnidade2 = Double.parseDouble(textoUnidade2);
+                }
+                Double valorEntrada = null;
+                if (textoEntrada.isEmpty()) {
+                } else {
+                    valorEntrada = Double.parseDouble(textoEntrada);
+                }
+                Double valorSaida = null;
+                if (textoSaida.isEmpty()) {
+                } else {
+                    valorSaida = Double.parseDouble(textoSaida);
+                }
 
-                    //Cálculos
-                    Float valor;
+                //Cálculos
+                Float valor;
+                Float flagCalculou = 0f;
+                // Verifica se os campos necessários para cada cálculo estão vazios.
+                if (valorPorcentagem != null && valorLimiteSuperior!= null && valorLimiteInferior!= null) {
                     Double rPorcentagem = -((100 - valorPorcentagem) * (valorLimiteSuperior - valorLimiteInferior) - (100 * valorLimiteSuperior)) / 100;
                     valor = new BigDecimal(rPorcentagem).setScale(2, RoundingMode.HALF_UP).floatValue();
                     resultadoPorcentagem.setText(valor.toString());
+                    flagCalculou ++;
+                }
+                if (valorLimiteSuperior != null && valorUnidade != null && valorLimiteInferior != null) {
                     Double rUnidade = -(100 * (valorLimiteSuperior - valorUnidade) - ((valorLimiteSuperior - valorLimiteInferior) * 100)) / (valorLimiteSuperior - valorLimiteInferior);
                     valor = new BigDecimal(rUnidade).setScale(2, RoundingMode.HALF_UP).floatValue();
                     resultadoUnidade.setText(valor.toString());
+                    flagCalculou ++;
+                }
+                if (valorLimiteSuperior != null && valorMa != null && valorLimiteInferior != null) {
                     Double rMa = -(((valorLimiteSuperior - valorLimiteInferior) * (20 - valorMa)) - (valorLimiteSuperior * (16))) / (16);
                     valor = new BigDecimal(rMa).setScale(2, RoundingMode.HALF_UP).floatValue();
                     resultadoMA.setText(valor.toString());
+                    flagCalculou ++;
+                }
+                if (valorLimiteSuperior != null && valorUnidade2 != null && valorLimiteInferior != null) {
                     Double rUnidade2 = -((valorLimiteSuperior - valorUnidade2) * (16) - (20 * (valorLimiteSuperior - valorLimiteInferior))) / (valorLimiteSuperior - valorLimiteInferior);
                     valor = new BigDecimal(rUnidade2).setScale(2, RoundingMode.HALF_UP).floatValue();
                     resultadoUnidade2.setText(valor.toString());
+                    flagCalculou ++;
+                }
+                if (valorEntrada != null) {
                     Double rEntrada = (Math.pow(valorEntrada, 0.5)) * 10;
                     valor = new BigDecimal(rEntrada).setScale(2, RoundingMode.HALF_UP).floatValue();
                     resultadoEntrada.setText(valor.toString());
-                    Double rSaida = Math.pow((valorSaida/10), 2);
+                    flagCalculou ++;
+                }
+                if (valorSaida != null) {
+                    Double rSaida = Math.pow((valorSaida / 10), 2);
                     valor = new BigDecimal(rSaida).setScale(2, RoundingMode.HALF_UP).floatValue();
                     resultadoSaida.setText(valor.toString());
+                    flagCalculou ++;
+                }
 
+                if (flagCalculou == 0f) {
+                    Toast.makeText(getApplicationContext(), "Favor preencher todos os campos necessários.", Toast.LENGTH_SHORT).show();
                 }
             }
 
