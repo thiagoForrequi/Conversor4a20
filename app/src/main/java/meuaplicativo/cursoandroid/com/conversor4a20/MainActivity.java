@@ -1,8 +1,12 @@
 package meuaplicativo.cursoandroid.com.conversor4a20;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.PopupMenu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -33,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText saida;
     private Button btnCalcular;
     private Button btnLimpar;
+    private TextView btnSobre;
     private TextView resultadoPorcentagem;
     private TextView resultadoUnidade;
     private TextView resultadoMA;
@@ -63,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         saida = (EditText) findViewById(R.id.editTextSaidaId);
         btnCalcular = (Button) findViewById(R.id.btnCalcularId);
         btnLimpar = (Button) findViewById(R.id.btnLimparId);
+        btnSobre = (TextView) findViewById(R.id.btnSobreId);
 
         resultadoPorcentagem = (TextView) findViewById(R.id.resultPorcentagemId);
         resultadoUnidade = (TextView) findViewById(R.id.resultUnidadeId);
@@ -75,6 +81,32 @@ public class MainActivity extends AppCompatActivity {
         textUnidade2 = (TextView) findViewById(R.id.textUnidade2);
         textUnidade3 = (TextView) findViewById(R.id.textUnidade3);
         textUnidade4 = (TextView) findViewById(R.id.textUnidade4);
+
+        // Adiciona listener para o botão "sobre"
+        btnSobre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PopupMenu popupMenu = new PopupMenu(MainActivity.this, btnSobre);
+                popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu());
+
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        int id = item.getItemId();
+                        switch (id){
+                            case R.id.itemEmail:
+                                ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                                ClipData clip = ClipData.newPlainText("label", "thiagolubiana@gmail.com");
+                                clipboard.setPrimaryClip(clip);
+                                Toast.makeText(getApplicationContext(), "Copiado para área de transferência.", Toast.LENGTH_SHORT).show();
+                                return true;
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
+            }
+        });
 
         // Instanciando Spinner 1
         tiposUnidades = (Spinner) findViewById(R.id.spinTiposUnidades);
